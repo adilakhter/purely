@@ -4,7 +4,4 @@
 /project/project/
 /project/target/
 /target/
-src/main/scala/com/example/Twitter.scala
-src/main/scala/com/example/Markov.scala
 src/main/resources
-*.json

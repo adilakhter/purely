@@ -28,18 +28,15 @@ object Hello extends App {
     }
   }
 
-  def randomString(
-      getTweetsF: String => ReaderT[Future, Config, List[Tweet]],
-      generateTextF: String => ReaderT[Future, Config, String])
-    (username: String): ReaderT[Future, Config, String] = {
-
+  def randomString(username: String): ReaderT[Future, Config, String] = {
     for {
-      ts <- getTweetsF(username)
-      tweetsAsText = ts.map(_.content).mkString(" ")
-      randomString <- generateTextF(tweetsAsText)
-    } yield randomString
+      ts <- getTweets(username)
+      tweetsAsText = ts.map(_.text).mkString(" ")
+      r <- generateString(tweetsAsText)
+    } yield r
   }
 
-  randomString(getTweets, generateString)("mfirry")
+  def forMe = randomString("mfirry").run(Config("apiKey", "secret", 2))
+  Await.result(forMe, 10.second)
 
 }
